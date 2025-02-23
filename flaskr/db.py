@@ -42,5 +42,3 @@ def get_data():
     
     except Exception as e:
         print("An Unexpected Error has Occured: ", e)
-
-
