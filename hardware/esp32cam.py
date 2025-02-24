@@ -27,7 +27,7 @@ class ESP32CamController:
         # Inisialisasi kamera
         try:
             camera.init(0, format=camera.JPEG)
-            camera.framesize(camera.FRAME_QVGA)  # Resize to QVGA (320x240)
+            camera.framesize(camera.FRAME_VGA)  # Resize to QVGA (320x240)
             camera.quality(10) 
             print("Camera initialized successfully")
         except Exception as e:
