@@ -4,8 +4,8 @@ import requests
 app = Flask(__name__)
 
 # Token Ubidots
-UBIDOTS_TOKEN = "BBUS-19EBF2JcQG57CwVMPHvt04nGs0wsTs"  # Ganti dengan token API Ubidots
-DEVICE_LABEL = "demo-machine"    # Sesuaikan dengan nama perangkat di Ubidots
+UBIDOTS_TOKEN = "BBUS-YRFncRgHQkiPjyr0qTLncnR6EKZ00F"  # Ganti dengan token API Ubidots
+DEVICE_LABEL = "SymbIoT"    # Sesuaikan dengan nama perangkat di Ubidots
 
 UBIDOTS_URL = f"https://industrial.api.ubidots.com/api/v1.6/devices/{DEVICE_LABEL}/"
 HEADERS = {
