@@ -1,3 +1,8 @@
+"""
+    SIC6 Assignment 2 - 25/02/2025
+    Team: UNI544 - SymbIoT
+    Theme: Fire detection using OpenCV and ESP32-CAM with added DHT and MQ135 sensor readings
+"""
 from flask import Flask, request, jsonify
 import requests
 import paho.mqtt.client as mqtt
@@ -65,11 +70,11 @@ def receive_data():
         data["status"] = current_result
         print("Data diterima dari ESP32:", data)
 
-        # Kirim ke Ubidots
+        # Send to Ubidots
         response = requests.post(UBIDOTS_URL, json=data, headers=HEADERS)
         print("Respon dari Ubidots:", response.text)
 
-        # Kirim ke db
+        # Send to DB
         db.send_data(data)
 
         return jsonify({"message": "Data dikirim ke Ubidots", "ubidots_response": response.json()})
