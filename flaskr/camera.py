@@ -13,22 +13,27 @@ def flame_detector(img_buffer):
     
     if img is not None:
         """" Parameters needed for fire detection based on HSV and minimum contour area """
-        lower_red = np.array([0,120,70])
-        upper_red = np.array([10,255,255])
+        lower_red = np.array([8, 17, 50])
+        upper_red = np.array([126, 149, 255])
 
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
         mask = cv2.inRange(hsv, lower_red, upper_red)
 
-        min_contour_area = 1000
+        min_contour_area = 100
         contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
         fire_detected = False
+
+        # Find all available contours and detect when theres fire
         for contour in contours:
             area = cv2.contourArea(contour)
             if area >= min_contour_area:
                 fire_detected = True
-                break  # No need to check further
+                break  
+        
+        # cv2.drawContours(img, contours, -1, (0,255,0), 2)
+        # cv2.imshow("ESP32 Stream", img)
         return int(1) if fire_detected else int(0)
+
     
     if cv2.waitKey(1) & 0xFF == ord('q'):
         cv2.destroyAllWindows()

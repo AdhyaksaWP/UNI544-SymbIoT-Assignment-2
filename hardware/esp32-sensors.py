@@ -5,11 +5,11 @@ import dht
 import time
 import json
 
-# *WiFi Config*
+# WiFi Config
 SSID = "UGM eduroam"
 PASSWORD = "moyf7667"
 
-# *Koneksi WiFi*
+# Koneksi WiFi
 wlan = network.WLAN(network.STA_IF)
 wlan.active(True)
 wlan.connect(SSID, PASSWORD)
@@ -20,15 +20,15 @@ while not wlan.isconnected():
 
 print("Terhubung ke WiFi:", wlan.ifconfig())
 
-# *Konfigurasi Sensor*
+# Konfigurasi Sensor
 DHT_PIN = 32
 MQ135_PIN = 34
 dht_sensor = dht.DHT11(machine.Pin(DHT_PIN))
 mq135_sensor = machine.ADC(machine.Pin(MQ135_PIN))
 mq135_sensor.atten(machine.ADC.ATTN_11DB)
 
-# *Alamat Flask API*
-FLASK_SERVER = "http://192.168.11.226:5000/data"  # Ganti dengan IP Flask Server
+# Alamat Flask API
+FLASK_SERVER = "http://192.168.11.226:5000/data"  
 
 while True:
     try:
@@ -51,4 +51,4 @@ while True:
     except Exception as e:
         print("Error:", str(e))
 
-    time.sleep(2)
+    time.sleep(3)

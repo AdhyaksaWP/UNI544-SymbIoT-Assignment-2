@@ -27,7 +27,7 @@ class ESP32CamController:
         # Inisialisasi kamera
         try:
             camera.init(0, format=camera.JPEG)
-            camera.framesize(camera.FRAME_VGA)  # Resize to QVGA (320x240)
+            camera.framesize(camera.FRAME_QQVGA)
             camera.quality(10) 
             print("Camera initialized successfully")
         except Exception as e:
@@ -93,6 +93,7 @@ class ESP32CamController:
             try:
                 img_buffer = self.capture_image()
                 
+                # Kirim raw buffer secara langsung ke topic
                 if img_buffer:
                     self.client.publish(MQTT_TOPIC_PUB, img_buffer)
                     print("Image published")

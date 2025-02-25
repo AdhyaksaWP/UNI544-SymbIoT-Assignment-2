@@ -4,12 +4,13 @@ import paho.mqtt.client as mqtt
 import threading
 import queue
 import camera
+import db
 
 app = Flask(__name__)
 
 # Token Ubidots
-UBIDOTS_TOKEN = "BBUS-YRFncRgHQkiPjyr0qTLncnR6EKZ00F"  # Ganti dengan token API Ubidots
-DEVICE_LABEL = "SymbIoT"    # Sesuaikan dengan nama perangkat di Ubidots
+UBIDOTS_TOKEN = "BBUS-YRFncRgHQkiPjyr0qTLncnR6EKZ00F"  
+DEVICE_LABEL = "SymbIoT"    
 
 UBIDOTS_URL = f"https://industrial.api.ubidots.com/api/v1.6/devices/{DEVICE_LABEL}/"
 HEADERS = {
@@ -30,12 +31,12 @@ camera_result = None
 camera_result_lock = threading.Lock()
 
 def on_connect(client, userdata, flags, rc):
-    print(f"Connected with result code {rc}")
+    # print(f"Connected with result code {rc}")
     client.subscribe(MQTT_TOPIC_SUB)
 
 def on_message(client, userdata, msg):
     print(f"Received message from {msg.topic}")
-    message_queue.put(msg.payload)  # Add message to queue instead of processing directly
+    message_queue.put(msg.payload)  
 
 def mqtt_thread():
     client = mqtt.Client(client_id=MQTT_CLIENT_ID, protocol=mqtt.MQTTv311)
@@ -60,13 +61,16 @@ def receive_data():
         data = request.json
         with camera_result_lock:
             current_result = camera_result
-            print("CURRENT RESULT: ", current_result)
+
         data["status"] = current_result
         print("Data diterima dari ESP32:", data)
-        
+
         # Kirim ke Ubidots
         response = requests.post(UBIDOTS_URL, json=data, headers=HEADERS)
         print("Respon dari Ubidots:", response.text)
+
+        # Kirim ke db
+        db.send_data(data)
 
         return jsonify({"message": "Data dikirim ke Ubidots", "ubidots_response": response.json()})
     except Exception as e:
@@ -79,5 +83,5 @@ def mqtt_main():
     processor.start()
 
 if __name__ == '__main__':
-    mqtt_main()  # Start MQTT threads first
+    mqtt_main()
     app.run(host="0.0.0.0", port=5000, debug=True)
